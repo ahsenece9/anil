@@ -1,0 +1,202 @@
+<title>FILS Güz 2026 Programları</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,700&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Düzen: tek sütun okuma alanı; üstte kurallar ve analiz tablosu, altta filtre + program kartları ve haftalık ızgara */
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#18212e; --muted:#5b6676; --line:#d9dee6;
+  --accent:#1f5f8b; --accent-soft:#e3eef6;
+  --strong:#1e7a4a; --strong-bg:#e2f3e9; --mid:#9a6a00; --mid-bg:#fbf0d4; --weak:#6d7480; --weak-bg:#eceef1;
+  --odd:#2c6fb0; --even:#b0552c; --spm:#6b3fa0;
+  --f-display:"Literata", Georgia, serif; --f-body:"Public Sans", system-ui, sans-serif; --f-mono:"JetBrains Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12161c; --panel:#1a2029; --ink:#e5e9ef; --muted:#9aa5b4; --line:#2e3744;
+  --accent:#7db6e0; --accent-soft:#1d3346;
+  --strong:#6fd19b; --strong-bg:#173526; --mid:#e7bb5a; --mid-bg:#3a2e12; --weak:#a3abb7; --weak-bg:#262d37;
+  --odd:#6fa8e0; --even:#e39468; --spm:#b993e6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12161c; --panel:#1a2029; --ink:#e5e9ef; --muted:#9aa5b4; --line:#2e3744;
+  --accent:#7db6e0; --accent-soft:#1d3346;
+  --strong:#6fd19b; --strong-bg:#173526; --mid:#e7bb5a; --mid-bg:#3a2e12; --weak:#a3abb7; --weak-bg:#262d37;
+  --odd:#6fa8e0; --even:#e39468; --spm:#b993e6; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:16px;padding-block:28px 60px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:2rem} h2{font-size:1.35rem} h3{font-size:1.05rem}
+p{margin:0;max-width:72ch}
+.muted{color:var(--muted)}
+.eyebrow{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+section{display:flex;flex-direction:column;gap:12px}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.rule{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-size:.9rem}
+.rule b{display:block;margin-bottom:2px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:var(--bg);position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+td.n{font-family:var(--f-mono);color:var(--muted);width:2ch}
+.chip{display:inline-block;font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:999px;white-space:nowrap}
+.g3{background:var(--strong-bg);color:var(--strong)} .g2{background:var(--mid-bg);color:var(--mid)} .g1{background:var(--weak-bg);color:var(--weak)} .g0{background:var(--weak-bg);color:var(--weak)}
+.m{display:flex;flex-direction:column;gap:6px}
+.m div{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.en{font-weight:600}
+.code{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+.filters{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px}
+.filters label{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted);font-weight:600}
+select{font:inherit;font-size:.9rem;padding:5px 8px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);max-width:100%}
+.count{font-family:var(--f-mono);font-size:.85rem}
+.layout{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.layout{grid-template-columns:minmax(0,1fr)}}
+.list{display:flex;flex-direction:column;gap:6px;max-height:900px;overflow-y:auto;padding-right:4px}
+.card{all:unset;box-sizing:border-box;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:9px 11px;display:flex;flex-direction:column;gap:4px}
+.card:hover{border-color:var(--accent)}
+.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card[aria-current="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.card .top{display:flex;justify-content:space-between;gap:8px;font-size:.8rem;color:var(--muted)}
+.card .top b{font-family:var(--f-mono);color:var(--ink)}
+.card .codes{font-family:var(--f-mono);font-size:.78rem;line-height:1.45}
+.detail{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.grid-wrap{overflow-x:auto}
+.week{display:grid;grid-template-columns:44px repeat(5,minmax(110px,1fr));min-width:620px;position:relative;font-size:.72rem}
+.week .h{font-family:var(--f-mono);color:var(--muted);border-top:1px solid var(--line);height:30px;padding-right:4px;text-align:right}
+.week .dh{font-weight:700;text-align:center;padding-bottom:4px;font-size:.78rem}
+.col{position:relative;border-left:1px solid var(--line)}
+.col .slot{height:30px;border-top:1px solid var(--line)}
+.blk{position:absolute;border-radius:3px;padding:2px 4px;overflow:hidden;line-height:1.2;color:var(--ink);border:1px solid var(--line);background:var(--accent-soft)}
+.blk.T{border-left:3px solid var(--odd)} .blk.E{border-left:3px solid var(--even)}
+.blk.spm{background:color-mix(in srgb,var(--spm) 18%,var(--panel))}
+.blk b{display:block;font-family:var(--f-mono);font-size:.7rem}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.78rem;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px;border-radius:2px}
+.lg-h::before{background:var(--accent-soft);border:1px solid var(--line)} .lg-t::before{background:var(--odd)} .lg-c::before{background:var(--even)} .lg-s::before{background:var(--spm)}
+.vars{display:flex;flex-direction:column;gap:8px}
+.var{border:1px solid var(--line);border-radius:5px;padding:8px 10px;font-size:.84rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2px 14px}
+.var .t{font-weight:600}
+.labs{font-size:.84rem;display:flex;flex-direction:column;gap:3px}
+.note{font-size:.84rem;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:8px">
+    <span class="eyebrow">UPB · FILS · 2026/2027 1. dönem</span>
+    <h1>Erasmus ders eşleştirme ve çakışmasız programlar</h1>
+    <p class="muted">24 TR dersinin içeriği, FILS İngilizce dersleriyle karşılaştırıldı. Software Project Management her programda Bitirme karşılığı olarak sabit. Programlar yalnızca içeriği orta veya güçlü uyuşan derslerle kuruldu.</p>
+  </header>
+
+  <section>
+    <h2>Uygulanan kurallar</h2>
+    <div class="rules">
+      <div class="rule"><b>Çakışma yok</b>Ders, lab, proje ve seminer saatleri hiçbir haftada üst üste gelmez. Tek ve çift hafta ayrı hesaplanır.</div>
+      <div class="rule"><b>Grup serbest</b>Her derste istenen alt grubun (sgr/sg/group) lab saati seçilebilir.</div>
+      <div class="rule"><b>Erasmus labı öncelikli</b>Erasmus'a ayrı lab açılan derslerde (IP, ACG, FLC, IoT, AI, OOP) yalnızca o lab kullanıldı.</div>
+      <div class="rule"><b>Tek / çift hafta</b>Diyagonal hücrede üst kısım tek hafta, alt kısım çift hafta.</div>
+      <div class="rule"><b>SPM = Bitirme</b>Per 18-20 ders, Per 20-22 lab (tek veya çift hafta). Her programda var.</div>
+      <div class="rule"><b>Birebir eşleşme</b>Her İngilizce ders tek bir TR dersinin karşılığı sayıldı.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>TR derslerinin içerik analizi</h2>
+    <p class="muted">Güç: <span class="chip g3">güçlü</span> konuların çoğu örtüşüyor · <span class="chip g2">orta</span> çekirdek konuların bir kısmı örtüşüyor · <span class="chip g1">zayıf</span> sadece birkaç hafta örtüşüyor (programlara alınmadı).</p>
+    <div class="tbl"><table id="analiz"><thead><tr><th>#</th><th>TR dersi</th><th>TR içerik özeti</th><th>İngilizce karşılık adayları</th></tr></thead><tbody></tbody></table></div>
+    <p class="note" id="cakisan"></p>
+  </section>
+
+  <section>
+    <h2>Olası programlar</h2>
+    <p class="muted" id="ozet"></p>
+    <div class="filters">
+      <label for="f-min">En az TR dersi<select id="f-min"></select></label>
+      <label for="f-tr">Mutlaka karşılanacak TR dersi<select id="f-tr"><option value="">Hepsi</option></select></label>
+      <label for="f-en">Mutlaka olacak İngilizce ders<select id="f-en"><option value="">Hepsi</option></select></label>
+      <label for="f-no">Olmasın<select id="f-no"><option value="">—</option></select></label>
+      <span class="count" id="f-count"></span>
+    </div>
+    <div class="layout">
+      <div class="list" id="list" role="list"></div>
+      <div class="detail" id="detail"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const D=/*__DATA__*/null;
+const GUC={3:["güçlü","g3"],2:["orta","g2"],1:["zayıf","g1"]};
+const DAYS=["Pzt","Sal","Çar","Per","Cum"]; const H0=8,H1=22;
+const enName=c=>D.en[c]?D.en[c].ad:c;
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const hw=w=>w==="H"?"her hafta":w==="T"?"tek hafta":"çift hafta";
+const fmt=s=>`${s[0]} ${s[1]}-${s[2]}${s[3]==="H"?"":" ("+(s[3]==="T"?"tek":"çift")+")"}`;
+
+// analiz tablosu
+const tb=document.querySelector("#analiz tbody");
+D.tr.forEach((t,i)=>{
+  const ms=t.es.length?t.es.map(e=>`<div><span class="chip ${GUC[e.guc][1]}">${GUC[e.guc][0]}</span><span class="en">${esc(enName(e.en))}</span><span class="code">${e.en}</span><span class="muted" style="flex-basis:100%">${esc(e.not_)}</span></div>`).join(""):`<div><span class="chip g0">yok</span><span class="muted">Ders programında içerikçe uyuşan İngilizce ders yok.</span></div>`;
+  const z=t.zayif?`<div class="muted" style="font-size:.8rem">Not: ${esc(t.zayif)}</div>`:"";
+  tb.insertAdjacentHTML("beforeend",`<tr><td class="n">${i+1}</td><td><b>${esc(t.ad)}</b></td><td class="muted">${esc(t.konu)}</td><td><div class="m">${ms}${z}</div></td></tr>`);
+});
+document.getElementById("cakisan").textContent="Programa alınamayanlar: "+D.cakisan.map(c=>`${c.ad} (${c.neden})`).join("; ")+".";
+
+// filtreler
+const trNames=[...new Set(D.paket.flatMap(p=>p.varyant.flatMap(v=>v.map(e=>e.tr))))];
+const enCodes=[...new Set(D.paket.flatMap(p=>p.en))].sort();
+const sizes=[...new Set(D.paket.map(p=>p.en.length))].sort((a,b)=>a-b);
+const fmin=document.getElementById("f-min"), ftr=document.getElementById("f-tr"), fen=document.getElementById("f-en"), fno=document.getElementById("f-no");
+sizes.forEach(n=>fmin.insertAdjacentHTML("beforeend",`<option value="${n}">${n}</option>`));
+D.tr.map(t=>t.ad).filter(a=>trNames.includes(a)).forEach(a=>ftr.insertAdjacentHTML("beforeend",`<option>${esc(a)}</option>`));
+enCodes.forEach(c=>{const o=`<option value="${c}">${esc(enName(c))}</option>`;fen.insertAdjacentHTML("beforeend",o);fno.insertAdjacentHTML("beforeend",o)});
+document.getElementById("ozet").textContent=`${D.paket.length} farklı ders paketi (girilen İngilizce derslerin kümesi) ve bunların ${D.toplam_varyant} farklı TR eşleştirme varyantı bulundu. Hepsi maksimal: listeye çakışmadan eklenebilecek başka uyumlu ders kalmamış. Sıralama: önce karşılanan TR ders sayısı, sonra toplam içerik gücü.`;
+
+let current=null;
+function filtered(){
+  const mn=+fmin.value||0, tr=ftr.value, en=fen.value, no=fno.value;
+  return D.paket.filter(p=>p.en.length>=mn && (!en||p.en.includes(en)) && (!no||!p.en.includes(no)) && (!tr||p.varyant.some(v=>v.some(e=>e.tr===tr))));
+}
+function renderList(){
+  const L=document.getElementById("list"); const ps=filtered();
+  document.getElementById("f-count").textContent=`${ps.length} paket`;
+  L.innerHTML=ps.map(p=>`<button class="card" role="listitem" data-no="${p.no}" aria-current="${current===p.no}"><span class="top"><span>Paket <b>${p.no}</b></span><span>${p.en.length} TR dersi · güç ${p.guc} · ${p.varyant.length} varyant</span></span><span class="codes">SPM · ${p.en.join(" · ")}</span></button>`).join("")||`<p class="muted">Bu filtreye uyan program yok.</p>`;
+  L.querySelectorAll(".card").forEach(b=>b.onclick=()=>{current=+b.dataset.no;renderList();renderDetail()});
+  if(!ps.some(p=>p.no===current)){current=ps.length?ps[0].no:null;if(ps.length){L.querySelector(".card").setAttribute("aria-current","true")}renderDetail()}
+}
+function sessions(p,cfgIdx){
+  const cfg=p.lab[cfgIdx]; const out=[];
+  ["SPM",...p.en].forEach(c=>{
+    const e=D.en[c]; e.C.forEach(s=>out.push({c,kind:"ders",s}));
+    const lab=e.lab.find(l=>l[0]===cfg[c]); if(lab) lab[1].forEach(s=>out.push({c,kind:lab[0],s}));
+  });
+  return out;
+}
+function renderDetail(){
+  const box=document.getElementById("detail"); const p=D.paket.find(x=>x.no===current);
+  if(!p){box.innerHTML=`<p class="muted">Soldan bir paket seç.</p>`;return}
+  const sel=`<label for="cfg" class="eyebrow" style="display:flex;flex-direction:column;gap:4px">Lab seçimi (${p.lab.length} geçerli kombinasyon)<select id="cfg">${p.lab.map((c,i)=>`<option value="${i}">Seçenek ${i+1}: ${Object.entries(c).filter(([k,v])=>D.en[k].lab.length>1).map(([k,v])=>k+" "+v).join(", ")||"tek seçenek"}</option>`).join("")}</select></label>`;
+  const vars=p.varyant.map((v,i)=>`<div class="var"><div class="eyebrow" style="grid-column:1/-1">Varyant ${i+1} · güç ${v.reduce((a,e)=>a+e.guc,0)}</div>${v.map(e=>`<div><span class="t">${esc(e.tr)}</span> → ${esc(enName(e.en))} <span class="chip ${GUC[e.guc][1]}">${GUC[e.guc][0]}</span></div>`).join("")}<div><span class="t">Bitirme</span> → Software Project Management</div></div>`).join("");
+  const covered=new Set(p.varyant.flatMap(v=>v.map(e=>e.tr)));
+  box.innerHTML=`<div style="display:flex;flex-direction:column;gap:4px"><span class="eyebrow">Paket ${p.no}</span><h3>${p.en.length} TR dersi + Bitirme</h3><p class="muted" style="font-size:.86rem">Girilecek dersler: Software Project Management, ${p.en.map(enName).join(", ")}.</p></div>${sel}<div class="legend"><span class="lg-h">her hafta</span><span class="lg-t">tek hafta (sol yarı)</span><span class="lg-c">çift hafta (sağ yarı)</span><span class="lg-s">SPM / Bitirme</span></div><div class="grid-wrap"><div class="week" id="week"></div></div><div class="labs" id="labs"></div><div class="vars"><span class="eyebrow">TR eşleştirme varyantları</span>${vars}</div><p class="note">Bu paketle karşılanamayan TR dersleri: ${D.tr.map(t=>t.ad).filter(a=>!covered.has(a)).join(", ")}.</p>`;
+  const c=document.getElementById("cfg"); c.onchange=()=>drawWeek(p,+c.value); drawWeek(p,0);
+}
+function drawWeek(p,ci){
+  const W=document.getElementById("week"); const rows=H1-H0; const RH=30;
+  let h=`<div></div>`+DAYS.map(d=>`<div class="dh">${d}</div>`).join("");
+  h+=`<div>${Array.from({length:rows},(_,i)=>`<div class="h">${H0+i}:00</div>`).join("")}</div>`;
+  const ss=sessions(p,ci);
+  DAYS.forEach(d=>{
+    const blocks=ss.filter(x=>x.s[0]===d).map(x=>{
+      const [_,a,b,w]=x.s; const top=(a-H0)*RH, ht=(b-a)*RH-2;
+      const left=w==="Ç"?"50%":"2px", width=w==="H"?"calc(100% - 4px)":"calc(50% - 3px)";
+      const cls=(w==="T"?"T":w==="Ç"?"E":"")+(x.c==="SPM"?" spm":"");
+      return `<div class="blk ${cls}" style="top:${top}px;height:${ht}px;left:${left};width:${width}" title="${esc(enName(x.c))} — ${esc(x.kind)} — ${fmt(x.s)}"><b>${x.c}</b>${x.kind==="ders"?"ders":esc(x.kind)}</div>`;
+    }).join("");
+    h+=`<div class="col">${Array.from({length:rows},()=>`<div class="slot"></div>`).join("")}${blocks}</div>`;
+  });
+  W.innerHTML=h;
+  const L=document.getElementById("labs");
+  L.innerHTML=`<span class="eyebrow">Saat listesi</span>`+["SPM",...p.en].map(c=>{const x=ss.filter(y=>y.c===c);return `<div><b>${esc(enName(c))}</b> <span class="code">${c}</span> — ${x.map(y=>(y.kind==="ders"?"ders ":y.kind+" ")+fmt(y.s)).join("; ")}</div>`}).join("");
+}
+[fmin,ftr,fen,fno].forEach(e=>e.onchange=renderList);
+renderList();
+</script>
