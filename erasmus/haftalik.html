@@ -1,0 +1,100 @@
+<title>Güz 2026 Ders Programım</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,600&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Düzen: saat sütunu + 5 gün; her gün tek/çift hafta için iki alt sütuna bölünür, "her hafta" blokları ikisini kaplar */
+:root{
+  --bg:#f5f6f8; --panel:#ffffff; --ink:#1b2330; --muted:#5d6878; --line:#dde2e9; --line2:#eef1f5;
+  --c-sci:#7a5af5; --c-spm:#8b3fb8; --c-game:#e0661f; --c-st:#1f8a5b; --c-pp:#2f6fd6; --c-acse:#c2387a; --c-eth:#7a8696; --c-cyb:#c9342f;
+  --tint:14%;
+  --f-d:"Literata",Georgia,serif; --f-b:"Public Sans",system-ui,sans-serif; --f-m:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13171d; --panel:#1b212a; --ink:#e7ebf0; --muted:#9ba6b5; --line:#2f3845; --line2:#232a34;
+  --c-sci:#a491ff; --c-spm:#c27ee8; --c-game:#ff9a5c; --c-st:#5fd39c; --c-pp:#76a6ff; --c-acse:#f27ab1; --c-eth:#a7b1bf; --c-cyb:#ff7b73;
+  --tint:24%; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#13171d; --panel:#1b212a; --ink:#e7ebf0; --muted:#9ba6b5; --line:#2f3845; --line2:#232a34;
+  --c-sci:#a491ff; --c-spm:#c27ee8; --c-game:#ff9a5c; --c-st:#5fd39c; --c-pp:#76a6ff; --c-acse:#f27ab1; --c-eth:#a7b1bf; --c-cyb:#ff7b73;
+  --tint:24%; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-b);font-size:14px;line-height:1.45}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:24px 48px;display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--f-d);font-size:1.7rem;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.88rem}
+.stats b{font-family:var(--f-m)}
+.scroll{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px}
+.grid{display:grid;grid-template-columns:48px repeat(10,minmax(54px,1fr));grid-template-rows:auto auto repeat(14,46px);min-width:660px;position:relative}
+.dh{grid-row:1;text-align:center;font-weight:700;padding-bottom:2px}
+.wk{grid-row:2;text-align:center;font-size:.68rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;padding-bottom:6px}
+.hr{grid-column:1;font-family:var(--f-m);font-size:.72rem;color:var(--muted);text-align:right;padding-right:6px;transform:translateY(-.6em)}
+.cell{border-top:1px solid var(--line);border-left:1px solid var(--line2)}
+.cell.dayl{border-left:1px solid var(--line)}
+.b{margin:2px;border-radius:6px;padding:5px 7px;display:flex;flex-direction:column;gap:1px;overflow:hidden;
+   background:color-mix(in srgb,var(--c) var(--tint),var(--panel));border-left:4px solid var(--c);z-index:1;min-width:0}
+.b .t{font-weight:700;font-size:.8rem;line-height:1.2}
+.b .k{font-size:.72rem;color:var(--muted)}
+.b .h{font-family:var(--f-m);font-size:.68rem;color:var(--c)}
+.b.half .t{font-size:.72rem}
+.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px}
+.lg{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:.84rem}
+.sw{flex:none;width:12px;height:12px;border-radius:3px;background:var(--c);margin-top:4px}
+.lg .n{font-weight:700}
+.lg .m{color:var(--muted);font-size:.78rem}
+.note{color:var(--muted);font-size:.84rem;margin:0}
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <h1>Güz 2026 haftalık ders programı</h1>
+    <p class="sub">UPB · FILS · Erasmus · 35 AKTS · 4 TR dersi + Bitirme</p>
+    <div class="stats"><span>Tek hafta <b>19 saat</b></span><span>Çift hafta <b>21 saat</b></span><span>10. haftadan sonra <b>−2 saat</b> (PP dersi bitiyor)</span></div>
+  </header>
+
+  <div class="scroll"><div class="grid" id="g"></div></div>
+
+  <div class="legend" id="lg"></div>
+  <p class="note">Bir günün sütunu ikiye bölünmüşse sol yarı <b>tek hafta</b>, sağ yarı <b>çift hafta</b>dır. Tam genişlikteki bloklar her hafta yapılır. Scientific and Practical Research'ün sabit saati yok; çalışma zamanı Prof. Vasilateanu ile belirlenecek.</p>
+</div>
+
+<script>
+const C={
+  pp:{n:"Programming Paradigms",a:4,m:"Kabul edildi"},
+  cyb:{n:"Cybersecurity",a:4,m:"Siber Güvenlik · lisans"},
+  eth:{n:"Ethics",a:2,m:"Online"},
+  st:{n:"Special Topics in SE",a:3,m:"Gömülü Sistemler"},
+  acse:{n:"Advanced Concepts in SE",a:4,m:"Ek YL dersi"},
+  game:{n:"Game and Interactive Simulation Systems",a:4,m:"Sanal ve Artırılmış Gerçeklik"},
+  spm:{n:"Software Project Management",a:4,m:"Bitirme yedeği"},
+  sci:{n:"Scientific and Practical Research",a:10,m:"Bitirme · sabit saati yok"}
+};
+// [gün 0-4, başlangıç, bitiş, hafta H/T/Ç, ders, tür, oda]
+const S=[
+  [0,8,10,"H","pp","Lab","sg1 · CJ205"],
+  [0,16,18,"H","pp","Ders","2-9. hafta · CJ201"],
+  [0,19,21,"H","cyb","Ders","CJ05"],
+  [1,16,18,"H","eth","Ders","Online"],
+  [1,18,20,"H","st","Ders + lab","CJ007"],
+  [2,14,16,"Ç","acse","Lab","sg2 · CJ005"],
+  [2,16,18,"H","acse","Ders","CJ205"],
+  [2,18,21,"H","game","Ders + lab","CJ202"],
+  [3,18,20,"H","spm","Ders","CANTI-CTI"],
+  [3,20,22,"T","spm","Lab","g1 · CANTI-CTI"],
+  [4,19,21,"Ç","cyb","Lab","sgr1 · CJ05"]
+];
+const COL={pp:"--c-pp",cyb:"--c-cyb",eth:"--c-eth",st:"--c-st",acse:"--c-acse",game:"--c-game",spm:"--c-spm",sci:"--c-sci"};
+const D=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma"], H0=8, H1=22;
+const g=document.getElementById("g"); let h="";
+D.forEach((d,i)=>{h+=`<div class="dh" style="grid-column:${2+2*i}/span 2">${d}</div><div class="wk" style="grid-column:${2+2*i}">tek</div><div class="wk" style="grid-column:${3+2*i}">çift</div>`});
+for(let r=0;r<H1-H0;r++){
+  h+=`<div class="hr" style="grid-row:${3+r}">${String(H0+r).padStart(2,"0")}:00</div>`;
+  for(let c=0;c<10;c++) h+=`<div class="cell${c%2===0?" dayl":""}" style="grid-row:${3+r};grid-column:${2+c}"></div>`;
+}
+S.forEach(([d,a,b,w,k,t,o])=>{
+  const col=w==="H"?`${2+2*d}/span 2`:w==="T"?`${2+2*d}`:`${3+2*d}`;
+  h+=`<div class="b${w==="H"?"":" half"}" style="--c:var(${COL[k]});grid-column:${col};grid-row:${3+a-H0}/${3+b-H0}" title="${C[k].n} — ${t} — ${a}:00-${b}:00">
+    <span class="t">${C[k].n}</span><span class="k">${t}${w==="H"?"":w==="T"?" · tek hafta":" · çift hafta"}</span><span class="h">${a}-${b} · ${o}</span></div>`;
+});
+h+=`<div class="hr" style="grid-row:${3+H1-H0};transform:translateY(-1.4em)">22:00</div>`;
+g.innerHTML=h;
+document.getElementById("lg").innerHTML=Object.entries(C).map(([k,v])=>`<div class="lg" style="--c:var(${COL[k]})"><span class="sw"></span><span><span class="n">${v.n}</span> · <span style="font-family:var(--f-m)">${v.a} AKTS</span><br><span class="m">${v.m}</span></span></div>`).join("");
+</script>
