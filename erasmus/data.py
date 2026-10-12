@@ -250,3 +250,11 @@ ZAYIF_EK = {
     "Deneyim Mühendisliği": "Applied Human Computer Interaction (başka yüksek lisans) — elde ders programı yok",
     "Sosyal Ağ Analizi": "karşılık yok",
 }
+
+# Lisans dersleri için AKTS elde yok (ders programında yazmıyor, broşürlere erişilemedi).
+# Tahmini varsayılanlar: ders + lab = 4, yalnızca proje = 3. Rapor sayfasında düzenlenebilir.
+AKTS_TAHMIN = {"CYB": 4, "IP": 4, "ECG": 4, "ACG": 4, "FLC": 4, "IOT": 4, "AI": 4, "OOP": 4, "ISE": 4,
+               "WEB": 3, "NNGA": 3}
+for _k, _v in AKTS_TAHMIN.items():
+    EN[_k]["akts"] = _v
+    EN[_k]["akts_tahmini"] = True

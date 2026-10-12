@@ -76,6 +76,14 @@ select{font:inherit;font-size:.9rem;padding:5px 8px;border:1px solid var(--line)
 .var .t{font-weight:600}
 .labs{font-size:.84rem;display:flex;flex-direction:column;gap:3px}
 .note{font-size:.84rem;color:var(--muted)}
+.akts{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px}
+.akts label{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:6px 10px;font-size:.84rem}
+.akts label span.nm{flex:1;min-width:0}
+.akts .est{font-size:.7rem;color:var(--mid);font-weight:700}
+input[type=number]{font:inherit;font-family:var(--f-mono);font-size:.88rem;width:4.2em;padding:4px 6px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink)}
+.btn{font:inherit;font-size:.85rem;padding:6px 12px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.ak{font-family:var(--f-mono);font-weight:700;color:var(--accent)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -83,7 +91,7 @@ select{font:inherit;font-size:.9rem;padding:5px 8px;border:1px solid var(--line)
   <header style="display:flex;flex-direction:column;gap:8px">
     <span class="eyebrow">UPB · FILS · 2026/2027 1. dönem</span>
     <h1>Erasmus ders eşleştirme ve çakışmasız programlar</h1>
-    <p class="muted">24 TR dersinin içeriği, FILS İngilizce dersleriyle karşılaştırıldı. Software Project Management her programda Bitirme karşılığı olarak sabit. Programlar yalnızca içeriği orta veya güçlü uyuşan derslerle kuruldu.</p>
+    <p class="muted">24 TR dersinin içeriği, FILS İngilizce dersleriyle karşılaştırıldı. Software Project Management her programda Bitirme karşılığı olarak sabit. Programlar yalnızca içeriği orta veya güçlü uyuşan derslerle kuruldu ve toplam 30–40 AKTS aralığında tutuldu.</p>
   </header>
 
   <section>
@@ -94,6 +102,7 @@ select{font:inherit;font-size:.9rem;padding:5px 8px;border:1px solid var(--line)
       <div class="rule"><b>Erasmus labı öncelikli</b>Erasmus'a ayrı lab açılan derslerde (IP, ACG, FLC, IoT, AI, OOP) yalnızca o lab kullanıldı.</div>
       <div class="rule"><b>Tek / çift hafta</b>Diyagonal hücrede üst kısım tek hafta, alt kısım çift hafta.</div>
       <div class="rule"><b>SPM = Bitirme</b>Per 18-20 ders, Per 20-22 lab (tek veya çift hafta). Her programda var.</div>
+      <div class="rule"><b>30–40 AKTS</b>SPM dahil toplam AKTS en az 30, en fazla 40. Sınırlar aşağıdan değiştirilebilir.</div>
       <div class="rule"><b>Birebir eşleşme</b>Her İngilizce ders tek bir TR dersinin karşılığı sayıldı.</div>
     </div>
   </section>
@@ -103,6 +112,17 @@ select{font:inherit;font-size:.9rem;padding:5px 8px;border:1px solid var(--line)
     <p class="muted">Güç: <span class="chip g3">güçlü</span> konuların çoğu örtüşüyor · <span class="chip g2">orta</span> çekirdek konuların bir kısmı örtüşüyor · <span class="chip g1">zayıf</span> sadece birkaç hafta örtüşüyor (programlara alınmadı).</p>
     <div class="tbl"><table id="analiz"><thead><tr><th>#</th><th>TR dersi</th><th>TR içerik özeti</th><th>İngilizce karşılık adayları</th></tr></thead><tbody></tbody></table></div>
     <p class="note" id="cakisan"></p>
+  </section>
+
+  <section>
+    <h2>AKTS değerleri</h2>
+    <p class="muted">Yüksek lisans (MSE) derslerinin AKTS'si ders fişlerinden alındı. Lisans derslerinin AKTS'si elimdeki dosyalarda yok; <b>tahmini</b> işaretli değerleri gerçek değerlerle değiştir, programlar anında yeniden hesaplanır. Toplama SPM (Bitirme) dahildir.</p>
+    <div class="akts" id="akts"></div>
+    <div class="filters">
+      <label for="a-min">Toplam AKTS en az<input id="a-min" type="number" min="0" max="80" value="30"></label>
+      <label for="a-max">Toplam AKTS en fazla<input id="a-max" type="number" min="0" max="80" value="40"></label>
+      <button type="button" id="a-reset" class="btn">Tahminlere dön</button>
+    </div>
   </section>
 
   <section>
@@ -140,27 +160,55 @@ D.tr.forEach((t,i)=>{
 });
 document.getElementById("cakisan").textContent="Programa alınamayanlar: "+D.cakisan.map(c=>`${c.ad} (${c.neden})`).join("; ")+".";
 
+// AKTS editörü
+const LS="fils-akts-v1"; let saved={}; try{saved=JSON.parse(localStorage.getItem(LS)||"{}")}catch(e){}
+const AK={}; Object.entries(D.en).forEach(([k,v])=>AK[k]=saved[k]??v.akts);
+const usedCodes=[...new Set(D.kume.flatMap(p=>p.en))];
+const akBox=document.getElementById("akts");
+["SPM",...Object.keys(D.en).filter(k=>usedCodes.includes(k))].forEach(k=>{
+  const v=D.en[k];
+  akBox.insertAdjacentHTML("beforeend",`<label for="ak-${k}"><span class="nm">${esc(v.ad)} <span class="code">${k}</span>${v.tahmini?' <span class="est">tahmini</span>':''}</span><input id="ak-${k}" type="number" min="0" max="15" step="1" value="${AK[k]}" data-k="${k}"></label>`);
+});
+akBox.querySelectorAll("input").forEach(i=>i.oninput=()=>{AK[i.dataset.k]=+i.value||0;try{localStorage.setItem(LS,JSON.stringify(AK))}catch(e){}renderList()});
+document.getElementById("a-reset").onclick=()=>{Object.entries(D.en).forEach(([k,v])=>{AK[k]=v.akts;const i=document.getElementById("ak-"+k);if(i)i.value=v.akts});try{localStorage.removeItem(LS)}catch(e){}renderList()};
+const amin=document.getElementById("a-min"), amax=document.getElementById("a-max");
+const total=p=>AK.SPM+p.en.reduce((a,c)=>a+AK[c],0);
+
 // filtreler
-const trNames=[...new Set(D.paket.flatMap(p=>p.varyant.flatMap(v=>v.map(e=>e.tr))))];
-const enCodes=[...new Set(D.paket.flatMap(p=>p.en))].sort();
-const sizes=[...new Set(D.paket.map(p=>p.en.length))].sort((a,b)=>a-b);
+const trName=i=>D.tr[i].ad;
+const enCodes=usedCodes.slice().sort();
 const fmin=document.getElementById("f-min"), ftr=document.getElementById("f-tr"), fen=document.getElementById("f-en"), fno=document.getElementById("f-no");
-sizes.forEach(n=>fmin.insertAdjacentHTML("beforeend",`<option value="${n}">${n}</option>`));
-D.tr.map(t=>t.ad).filter(a=>trNames.includes(a)).forEach(a=>ftr.insertAdjacentHTML("beforeend",`<option>${esc(a)}</option>`));
+for(let n=1;n<=Math.max(...D.kume.map(p=>p.en.length));n++) fmin.insertAdjacentHTML("beforeend",`<option value="${n}">${n}</option>`);
+const trIdx=[...new Set(D.kume.flatMap(p=>p.varyant.flatMap(v=>v.map(e=>e[0]))))].sort((a,b)=>a-b);
+trIdx.forEach(i=>ftr.insertAdjacentHTML("beforeend",`<option value="${i}">${esc(trName(i))}</option>`));
 enCodes.forEach(c=>{const o=`<option value="${c}">${esc(enName(c))}</option>`;fen.insertAdjacentHTML("beforeend",o);fno.insertAdjacentHTML("beforeend",o)});
-document.getElementById("ozet").textContent=`${D.paket.length} farklı ders paketi (girilen İngilizce derslerin kümesi) ve bunların ${D.toplam_varyant} farklı TR eşleştirme varyantı bulundu. Hepsi maksimal: listeye çakışmadan eklenebilecek başka uyumlu ders kalmamış. Sıralama: önce karşılanan TR ders sayısı, sonra toplam içerik gücü.`;
+const keyOf=en=>en.join(",");
+const ALL=new Map(D.kume.map(p=>[keyOf(p.en),p]));
 
 let current=null;
+function eligible(){
+  const lo=+amin.value||0, hi=+amax.value||999;
+  // AKTS aralığında olan ve tavanı aşmadan çakışmasız başka ders eklenemeyen (maksimal) programlar
+  return D.kume.filter(p=>{
+    const t=total(p); if(t<lo||t>hi) return false;
+    for(const c of enCodes){ if(p.en.includes(c)) continue;
+      const k=keyOf([...p.en,c].sort()); if(ALL.has(k)&&t+AK[c]<=hi) return false; }
+    return true;
+  });
+}
 function filtered(){
   const mn=+fmin.value||0, tr=ftr.value, en=fen.value, no=fno.value;
-  return D.paket.filter(p=>p.en.length>=mn && (!en||p.en.includes(en)) && (!no||!p.en.includes(no)) && (!tr||p.varyant.some(v=>v.some(e=>e.tr===tr))));
+  return eligible().filter(p=>p.en.length>=mn && (!en||p.en.includes(en)) && (!no||!p.en.includes(no)) && (tr===""||p.varyant.some(v=>v.some(e=>e[0]===+tr))))
+    .sort((a,b)=>b.en.length-a.en.length||b.guc-a.guc||total(b)-total(a));
 }
 function renderList(){
-  const L=document.getElementById("list"); const ps=filtered();
-  document.getElementById("f-count").textContent=`${ps.length} paket`;
-  L.innerHTML=ps.map(p=>`<button class="card" role="listitem" data-no="${p.no}" aria-current="${current===p.no}"><span class="top"><span>Paket <b>${p.no}</b></span><span>${p.en.length} TR dersi · güç ${p.guc} · ${p.varyant.length} varyant</span></span><span class="codes">SPM · ${p.en.join(" · ")}</span></button>`).join("")||`<p class="muted">Bu filtreye uyan program yok.</p>`;
-  L.querySelectorAll(".card").forEach(b=>b.onclick=()=>{current=+b.dataset.no;renderList();renderDetail()});
-  if(!ps.some(p=>p.no===current)){current=ps.length?ps[0].no:null;if(ps.length){L.querySelector(".card").setAttribute("aria-current","true")}renderDetail()}
+  const L=document.getElementById("list"); const ps=filtered(); const el=eligible().length;
+  document.getElementById("ozet").textContent=`AKTS ${amin.value}–${amax.value} aralığında ${el} farklı program var (SPM dahil). Hepsi bu aralıkta maksimal: tavanı aşmadan ve çakışmadan eklenebilecek başka uyumlu ders kalmamış. Sıralama: karşılanan TR ders sayısı, sonra toplam içerik gücü.`;
+  document.getElementById("f-count").textContent=`${ps.length} program`;
+  L.innerHTML=ps.slice(0,300).map((p,i)=>`<button class="card" role="listitem" data-k="${keyOf(p.en)}" aria-current="${current===keyOf(p.en)}"><span class="top"><span><span class="ak">${total(p)} AKTS</span></span><span>${p.en.length} TR dersi · güç ${p.guc}</span></span><span class="codes">SPM · ${p.en.join(" · ")}</span></button>`).join("")+(ps.length>300?`<p class="muted">İlk 300 gösteriliyor; filtreyle daralt.</p>`:"")||`<p class="muted">Bu filtreye uyan program yok. AKTS aralığını veya değerleri kontrol et.</p>`;
+  L.querySelectorAll(".card").forEach(b=>b.onclick=()=>{current=b.dataset.k;renderList();renderDetail()});
+  if(!ps.some(p=>keyOf(p.en)===current)){current=ps.length?keyOf(ps[0].en):null;const f=L.querySelector(".card");if(f)f.setAttribute("aria-current","true")}
+  renderDetail();
 }
 function sessions(p,cfgIdx){
   const cfg=p.lab[cfgIdx]; const out=[];
@@ -171,12 +219,13 @@ function sessions(p,cfgIdx){
   return out;
 }
 function renderDetail(){
-  const box=document.getElementById("detail"); const p=D.paket.find(x=>x.no===current);
-  if(!p){box.innerHTML=`<p class="muted">Soldan bir paket seç.</p>`;return}
-  const sel=`<label for="cfg" class="eyebrow" style="display:flex;flex-direction:column;gap:4px">Lab seçimi (${p.lab.length} geçerli kombinasyon)<select id="cfg">${p.lab.map((c,i)=>`<option value="${i}">Seçenek ${i+1}: ${Object.entries(c).filter(([k,v])=>D.en[k].lab.length>1).map(([k,v])=>k+" "+v).join(", ")||"tek seçenek"}</option>`).join("")}</select></label>`;
-  const vars=p.varyant.map((v,i)=>`<div class="var"><div class="eyebrow" style="grid-column:1/-1">Varyant ${i+1} · güç ${v.reduce((a,e)=>a+e.guc,0)}</div>${v.map(e=>`<div><span class="t">${esc(e.tr)}</span> → ${esc(enName(e.en))} <span class="chip ${GUC[e.guc][1]}">${GUC[e.guc][0]}</span></div>`).join("")}<div><span class="t">Bitirme</span> → Software Project Management</div></div>`).join("");
-  const covered=new Set(p.varyant.flatMap(v=>v.map(e=>e.tr)));
-  box.innerHTML=`<div style="display:flex;flex-direction:column;gap:4px"><span class="eyebrow">Paket ${p.no}</span><h3>${p.en.length} TR dersi + Bitirme</h3><p class="muted" style="font-size:.86rem">Girilecek dersler: Software Project Management, ${p.en.map(enName).join(", ")}.</p></div>${sel}<div class="legend"><span class="lg-h">her hafta</span><span class="lg-t">tek hafta (sol yarı)</span><span class="lg-c">çift hafta (sağ yarı)</span><span class="lg-s">SPM / Bitirme</span></div><div class="grid-wrap"><div class="week" id="week"></div></div><div class="labs" id="labs"></div><div class="vars"><span class="eyebrow">TR eşleştirme varyantları</span>${vars}</div><p class="note">Bu paketle karşılanamayan TR dersleri: ${D.tr.map(t=>t.ad).filter(a=>!covered.has(a)).join(", ")}.</p>`;
+  const box=document.getElementById("detail"); const p=current&&ALL.get(current);
+  if(!p){box.innerHTML=`<p class="muted">Soldan bir program seç.</p>`;return}
+  const sel=`<label for="cfg" class="eyebrow" style="display:flex;flex-direction:column;gap:4px">Lab seçimi (${p.nlab} geçerli kombinasyon${p.nlab>p.lab.length?", ilk "+p.lab.length+" gösteriliyor":""})<select id="cfg">${p.lab.map((c,i)=>`<option value="${i}">Seçenek ${i+1}: ${Object.entries(c).filter(([k])=>D.en[k].lab.length>1).map(([k,v])=>k+" "+v).join(", ")||"tek seçenek"}</option>`).join("")}</select></label>`;
+  const vars=p.varyant.map((v,i)=>`<div class="var"><div class="eyebrow" style="grid-column:1/-1">Eşleştirme ${i+1} · güç ${v.reduce((a,e)=>a+e[2],0)}</div>${v.map(e=>`<div><span class="t">${esc(trName(e[0]))}</span> → ${esc(enName(e[1]))} <span class="chip ${GUC[e[2]][1]}">${GUC[e[2]][0]}</span></div>`).join("")}<div><span class="t">Bitirme</span> → Software Project Management</div></div>`).join("")+(p.nvar>p.varyant.length?`<p class="note">+${p.nvar-p.varyant.length} eşleştirme daha (daha düşük güçte).</p>`:"");
+  const covered=new Set(p.varyant[0].map(e=>e[0]));
+  const akList=["SPM",...p.en].map(c=>`${c} ${AK[c]}${D.en[c].tahmini?"*":""}`).join(" + ");
+  box.innerHTML=`<div style="display:flex;flex-direction:column;gap:4px"><span class="eyebrow">${p.en.length} TR dersi + Bitirme</span><h3><span class="ak">${total(p)} AKTS</span></h3><p class="muted" style="font-size:.84rem">${akList} = ${total(p)} <span class="code">(* tahmini)</span></p><p class="muted" style="font-size:.86rem">Girilecek dersler: Software Project Management, ${p.en.map(enName).join(", ")}.</p></div>${sel}<div class="legend"><span class="lg-h">her hafta</span><span class="lg-t">tek hafta (sol yarı)</span><span class="lg-c">çift hafta (sağ yarı)</span><span class="lg-s">SPM / Bitirme</span></div><div class="grid-wrap"><div class="week" id="week"></div></div><div class="labs" id="labs"></div><div class="vars"><span class="eyebrow">TR eşleştirmeleri</span>${vars}</div><p class="note">İlk eşleştirmeyle karşılanamayan TR dersleri: ${D.tr.map((t,i)=>i).filter(i=>!covered.has(i)).map(trName).join(", ")}.</p>`;
   const c=document.getElementById("cfg"); c.onchange=()=>drawWeek(p,+c.value); drawWeek(p,0);
 }
 function drawWeek(p,ci){
@@ -197,6 +246,6 @@ function drawWeek(p,ci){
   const L=document.getElementById("labs");
   L.innerHTML=`<span class="eyebrow">Saat listesi</span>`+["SPM",...p.en].map(c=>{const x=ss.filter(y=>y.c===c);return `<div><b>${esc(enName(c))}</b> <span class="code">${c}</span> — ${x.map(y=>(y.kind==="ders"?"ders ":y.kind+" ")+fmt(y.s)).join("; ")}</div>`}).join("");
 }
-[fmin,ftr,fen,fno].forEach(e=>e.onchange=renderList);
+[fmin,ftr,fen,fno].forEach(e=>e.onchange=renderList);[amin,amax].forEach(e=>e.oninput=renderList);
 renderList();
 </script>
